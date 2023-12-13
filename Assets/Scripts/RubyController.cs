@@ -24,8 +24,6 @@ public class RubyController : MonoBehaviour
     Animator animator;
     Vector2 lookDirection = new Vector2(1, 0);
 
-    public ParticleSystem healthEffect;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -87,7 +85,8 @@ public class RubyController : MonoBehaviour
         }
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        Debug.Log(currentHealth + "/" + maxHealth);
+
+        UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
     void Launch()
@@ -99,15 +98,5 @@ public class RubyController : MonoBehaviour
 
         animator.SetTrigger("Launch");
     }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "healthColectible")
-        {
-            healthEffect.Play();
-        }
-    }
-
-
 }
 
