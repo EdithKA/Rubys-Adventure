@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
     public bool vertical;
     public float changeTime = 3.0f;
 
-    Rigidbody2D rigidbody2D;
+    Rigidbody2D rb;
     float timer;
     int direction = 1;
     bool broken = true;
@@ -16,13 +16,16 @@ public class EnemyController : MonoBehaviour
     public ParticleSystem smokeEffect;
 
     Animator animator;
+    public AudioClip bot_fixed;
+    AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody2D = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         timer = changeTime;
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -50,7 +53,7 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
-        Vector2 position = rigidbody2D.position;
+        Vector2 position = rb.position;
 
         if (vertical)
         {
@@ -65,7 +68,7 @@ public class EnemyController : MonoBehaviour
             animator.SetFloat("MoveY", 0);
         }
 
-        rigidbody2D.MovePosition(position);
+        rb.MovePosition(position);
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -82,8 +85,10 @@ public class EnemyController : MonoBehaviour
     public void Fix()
     {
         broken = false;
-        rigidbody2D.simulated = false;
+        rb.simulated = false;
         animator.SetTrigger("Fixed");
         smokeEffect.Stop();
+        audioSource.PlayOneShot(bot_fixed);
+        
     }
 }
